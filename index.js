@@ -1,20 +1,22 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const boxes = document.querySelectorAll(".portfolio-box");
+  const form = document.getElementById("contact-form");
+  const response = document.getElementById("form-response");
 
-    boxes.forEach(box => {
-        const thumbnail = box.querySelector(".video_thumbnail");
-        const video = box.querySelector(".project_video");
+  form.addEventListener("submit", function (e) {
+    e.preventDefault(); // Prevent page reload
 
-        thumbnail.addEventListener("click", () => {
-            thumbnail.style.display = "none";
-            video.style.display = "block";
-            video.currentTime = 0;
-            video.play();
-        });
+    const formData = new FormData(form);
 
-        video.addEventListener("ended", () => {
-            video.style.display = "none";
-            thumbnail.style.display = "block";
-        });
+    fetch(form.action, {
+      method: "POST",
+      body: formData,
+      headers: {
+        'Accept': 'application/json'
+      }
+    }).then(responseData => {
+      response.innerText = "✅ Message sent successfully!";
+      form.reset();
+    }).catch(error => {
+      response.innerText = "❌ Failed to send. Please try again.";
+      console.error(error);
     });
-});
+  });
